@@ -6,6 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+//javac -cp .:lib/junit-4.13.2.jar:lib/hamcrest-core-1.3.jar MarkdownParseTest.java
+//java -cp .:lib/junit-4.13.2.jar:lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore MarkdownParseTest
+
+
 public class MarkdownParseTest {
     @Test
     public void addition() {
@@ -14,7 +18,7 @@ public class MarkdownParseTest {
 
     @Test
     public void addition2() {
-        assertEquals(2, 2 + 1);
+        assertEquals(3, 2 + 1);
     }
 
     @Test
@@ -70,6 +74,28 @@ public class MarkdownParseTest {
     public void testFile8() throws IOException {
         String contents = Files.readString(Path.of("./test-file8.md"));
         List<String> expect = List.of("a link on the first line");
+        assertEquals(MarkdownParse.getLinks(contents), expect);
+    }
+
+    @Test
+    public void testSnippet1() throws IOException {
+        String contents = Files.readString(Path.of("./snippet1.md"));
+        List<String> expect = List.of("%60google.com", "google.com", "ucsd.edu");
+        assertEquals(MarkdownParse.getLinks(contents), expect);
+    }
+
+    @Test
+    public void testSnippet2() throws IOException {
+        String contents = Files.readString(Path.of("./snippet2.md"));
+        List<String> expect = List.of("a.com", "a.com(())", "example.com");
+        assertEquals(MarkdownParse.getLinks(contents), expect);
+    }
+
+
+    @Test
+    public void testSnippet3() throws IOException {
+        String contents = Files.readString(Path.of("./snippet3.md"));
+        List<String> expect = List.of("https://ucsd-cse15l-w22.github.io/");
         assertEquals(MarkdownParse.getLinks(contents), expect);
     }
 }
